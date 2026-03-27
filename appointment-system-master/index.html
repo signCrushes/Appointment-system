@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediConnect - Appointment System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header (shown when logged in) -->
+        <header id="header" class="header hidden">
+            <div class="header-left">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <path d="M12 1v6m0 6v6"></path>
+                    <path d="M4.22 4.22l4.24 4.24m3.08 3.08l4.24 4.24"></path>
+                    <path d="M1 12h6m6 0h6"></path>
+                    <path d="M4.22 19.78l4.24-4.24m3.08-3.08l4.24-4.24"></path>
+                </svg>
+                <h2 class="logo">MediConnect</h2>
+            </div>
+            <div class="header-right">
+                <span>Welcome, <b id="username-display"></b> (<span id="role-display"></span>)</span>
+                <button class="logout-btn" onclick="logout()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Login Page -->
+        <div id="login-page" class="container-center">
+            <div class="login-card">
+                <div class="login-header">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <path d="M12 1v6m0 6v6"></path>
+                        <path d="M4.22 4.22l4.24 4.24m3.08 3.08l4.24 4.24"></path>
+                        <path d="M1 12h6m6 0h6"></path>
+                        <path d="M4.22 19.78l4.24-4.24m3.08-3.08l4.24-4.24"></path>
+                    </svg>
+                    <h1>MediConnect</h1>
+                    <p>Premium Healthcare Scheduling</p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('patient')">Patient Portal</button>
+                    <button class="tab-btn" onclick="switchTab('admin')">Administrator</button>
+                </div>
+
+                <form id="patient-form" class="login-form active" onsubmit="handleLogin(event, 'patient')">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Enter any password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Book Appointments</button>
+                </form>
+
+                <form id="admin-form" class="login-form" onsubmit="handleLogin(event, 'admin')">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Enter any password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Manage Clinic</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Patient Dashboard -->
+        <div id="patient-page" class="dashboard hidden">
+            <div class="page-container">
+                <div class="tabs-container">
+                    <button class="tab-btn active" onclick="switchPatientTab('doctors')">Find a Doctor</button>
+                    <button class="tab-btn" onclick="switchPatientTab('bookings')">My Bookings</button>
+                </div>
+
+                <!-- Find a Doctor Tab -->
+                <div id="doctors-tab" class="tab-content active">
+                    <div class="doctors-grid" id="doctors-grid"></div>
+                </div>
+
+                <!-- My Bookings Tab -->
+                <div id="bookings-tab" class="tab-content">
+                    <div id="bookings-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-page" class="dashboard hidden">
+            <div class="page-container">
+                <!-- Stats Row -->
+                <div class="stats-row" id="stats-row"></div>
+
+                <div class="admin-content">
+                    <div class="tabs-container">
+                        <button class="tab-btn active" onclick="switchAdminTab('appointments')">Manage Appointments</button>
+                        <button class="tab-btn" onclick="switchAdminTab('doctors')">Manage Doctors</button>
+                    </div>
+
+                    <!-- Manage Appointments -->
+                    <div id="appointments-tab" class="tab-content active">
+                        <div class="table-container">
+                            <table id="appointments-table">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Doctor</th>
+                                        <th>Date & Time</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="appointments-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Manage Doctors -->
+                    <div id="doctors-tab-admin" class="tab-content">
+                        <button class="btn btn-primary" style="margin-bottom: 20px;" onclick="openAddDoctorModal()">+ Add New Doctor</button>
+                        <div class="table-container">
+                            <table id="doctors-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Specialty</th>
+                                        <th>Hospital</th>
+                                        <th>Fee (Rs)</th>
+                                        <th>Available Days</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doctors-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="modal hidden">
+        <div class="modal-content modal-medium">
+            <div class="modal-header">
+                <h2 id="modal-title">Book Appointment</h2>
+                <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select Date:</label>
+                    <div class="date-slots" id="date-slots"></div>
+                </div>
+                <div class="form-group">
+                    <label>Select Time Slot:</label>
+                    <div class="time-slots" id="time-slots"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeBookingModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmBooking()">Confirm Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Doctor Modal -->
+    <div id="add-doctor-modal" class="modal hidden">
+        <div class="modal-content modal-medium">
+            <div class="modal-header">
+                <h2>Add New Doctor</h2>
+                <button class="modal-close" onclick="closeAddDoctorModal()">&times;</button>
+            </div>
+            <form id="add-doctor-form" onsubmit="handleAddDoctor(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Doctor Name</label>
+                        <input type="text" id="doctor-name" placeholder="Dr. First Last" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Specialty</label>
+                        <input type="text" id="doctor-specialty" placeholder="e.g. Neurologist" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Consultation Fee (Rs)</label>
+                        <input type="number" id="doctor-fee" placeholder="300" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Hospital</label>
+                        <input type="text" id="doctor-hospital" placeholder="e.g. City Medical Center" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Available Days</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Mon" class="day-checkbox"> Mon
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Tue" class="day-checkbox"> Tue
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Wed" class="day-checkbox"> Wed
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Thu" class="day-checkbox"> Thu
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Fri" class="day-checkbox"> Fri
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Sat" class="day-checkbox"> Sat
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Sun" class="day-checkbox"> Sun
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeAddDoctorModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

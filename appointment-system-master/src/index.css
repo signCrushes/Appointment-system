@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #1677ff;
+  --bg-color: #f4f6f8;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif !important;
+  background-color: var(--bg-color);
+  color: #333;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif !important;
+}
+
+/* Antd Overrides for a stunning look */
+.ant-btn-primary {
+  box-shadow: 0 4px 14px 0 rgba(22, 119, 255, 0.39);
+  border-radius: 8px;
+}
+
+.ant-card {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: none;
+}
+
+.ant-input,
+.ant-input-password,
+.ant-picker,
+.ant-select-selector {
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+}
+
+.ant-table-wrapper .ant-table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.stunning-header {
+  background: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+/* Day slot chips */
+.day-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background: #e6f4ff;
+  color: #1677ff;
+  font-size: 12px;
+  margin-right: 6px;
+  font-weight: 500;
+}
+
+.time-slot {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  margin: 0 8px 8px 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.time-slot:hover:not(.disabled) {
+  border-color: #1677ff;
+  color: #1677ff;
+}
+
+.time-slot.selected {
+  background: #1677ff;
+  color: white;
+  border-color: #1677ff;
+}
+
+.time-slot.disabled {
+  background: #f5f5f5;
+  color: #bfbfbf;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* Stat Cards */
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-title {
+  color: #8c8c8c;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #000;
+}
